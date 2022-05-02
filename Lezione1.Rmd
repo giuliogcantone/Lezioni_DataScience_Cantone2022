@@ -1,0 +1,125 @@
+---
+title: "Formati e strutture dati elementari su R"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pacman::p_load("tidyverse")
+```
+
+# Formati e Documenti
+
+Con la parola "Formati" ci riferiamo alla estensione (es, `.txt`) dei documenti (files) con cui lavoriamo. Questo può creare un po' di confusione col concetto di "formato tabellare", che di fatto è una "struttura dati" comune a più formati informatici nella Data Science.
+
+Ci sono due formati di files comunemente usati su R.
+
+## Lo Script
+
+Per aprire un nuovo "Script". In alto a sinistra, andate su "Files", poi su "New Files", ed infine "R Script". Potete anche premere `CTRL + Shift + N`.
+
+Lo script altro non è che un file di testo in cui annotate i comandi per lanciarli uno per uno, oppure in sequenza.
+
+Per lanciare un comando dentro uno script bisogna posizionare il cursore del testo all'inizio del comando e poi premere `Invio + ctrl`. Premere Invio da solo manda a capo il testo.
+
+Provate a scrivere questo comando in uno script:
+
+```
+print("Ciao a tutti, come va?")
+```
+
+e poi lanciatelo con `Invio + ctrl`.
+
+---
+`print` è un comando che ordina a R di trasportare **il risultato** di una certa operazione in console. Per esempio, `2+2` è una operazione di somma. Che succede se si lancia `print(2+2)`?
+
+R è ottimizzato in maniera tale che moltissimi comandi hanno un "print" implicito del loro risultato in console. Per esempio, se scrivete solo `2+2` in uno script e lo lanciate, cosa vedete apparire in console?
+
+Questo perchè R *interpreta* il vostro comando, non esegue sempre e solo ciecamente gli ordini.
+
+---
+
+Adesso lanciate `print("2+2")`. Cosa è cambiato?
+In questa lezione impareremo a disambiguare le operazioni per ottenere sempre il risultato desiderato.
+
+---
+
+Generalmente, non vorrete mai lanciare uno script per intero.
+
+---
+Questo non è Python! Su Python c'è la (brutta) tendenza a lanciare gli script per intero. Questa pratica non aiuta affatto chi è alle prime armi perché non permette di individuare quale pezzetto del codice è sbagliato.
+---
+
+## Il Markdown
+
+Il Markdown è un formato che interpreta un codice testuale testo e lo traduce in HTML, così da renderlo pubblicabile come pagina online.
+
+Per esempio, queste lezioni sono scritte in R Markdown, che è una versione alternativa di Markdwon che permette di eseguire blocchi di codice ("chunks") in R, Python ed altri linguaggi.
+
+Per aprire un nuovo file Markdown, seguite la stessa procedura per aprire uno Script, ma stavolta scegliete R Markdown.
+
+Il Markdown è simile allo script, ma in alto a destra c'è un simbolo con un più ed una "c". Se premuto, apre un chunk del linguaggio scelto. Adesso si può scrivere un codice, ad esempio una sequenza di comandi. In alto a destra del chunk c'è una freccia verso destra. Premendo la freccia, il codice sarà eseguito, ma piuttosto che riportare i risultati in console, li riporterà immediatamente sotto il chunk.
+
+```{r include=TRUE}
+print("ciao, come state?")
+"tutto bene"
+```
+
+
+---
+Questo modo di visualizzare i risultati dei comandi è molto simile al metodo di programmazione per Jupyter Notebook, che è molto popolare tra chi programma in Python.
+---
+
+# Studio sulle "Tabelle ben formate"
+
+Questa è una generica tabella:
+
+```{r}
+set.seed(1810)
+tibble(Dado_1 = sample(1:6, 30, replace = T),
+       Dado_2 = sample(1:6, 30, replace = T))
+```
+
+Qual è il problema della tabella qui sotto?
+
+```{r}
+set.seed(1810)
+data.frame(
+  Nome.1 = sample(c("Giovanni", "Maria", "Carlo", "Paola"),30, replace = T),
+  Dado_1 = sample(1:6, 30, replace = T),
+  Nome.2 = sample(c("Giovanni", "Maria", "Carlo", "Paola"),30, replace = T),
+  Dado_2 = sample(1:6, 30, replace = T)
+       )
+```
+
+Questo è un esempio stupidotto di come un errore di comunicazione di dati parimenti assolutamente validi vi può fare apparire come dei *dilettanti*.
+
+---
+
+### Principio assoluto della Data Science:
+
+In ogni Tabella "ben formata":
+
+- Ogni colonna deve rappresentare una variabile differente.
+- Ogni riga deve rappresentare una osservazione differente.
+- Ogni incrocio di colonna e riga deve assumere un valore *valido* nel supporto della variabile incolonnata, oppure un *valore mancante* o *missing value* (`NA`). Se invece il valore **non può esistere**, si usa `NaN`.
+
+Il supporto è l'insieme dei valori possibili per quella dimensione. Questo insieme può essere finito o anche infinito e limitato, ma non è mai illimitato.
+
+Cosa distingue l'infinito dall'illimitato?
+
+- Con un pianoforte posso suonare infiniti brani, con un numero limitato di tasti. ($cit.$ Alessandro Baricco)
+
+Esempio di operazione non valida perché travalica i limiti di una tabella "ben formata":
+
+```{r}
+set.seed(1810)
+data.frame(Nome = c("Giorgio", "Michela", "Laura"),
+           "Stato Civile" = c("Sposato con Michela", NA, "Nubile"),
+           Età = c(34,28,"venti")
+)
+```
