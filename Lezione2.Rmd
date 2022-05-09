@@ -1,0 +1,317 @@
+---
+title: "Comandi di calcolo algebrico, logico-testuale e statistico"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pacman::p_load("tidyverse")
+```
+
+# Definizione di comando ed "pipes" di Tydiverse
+
+Un comando, detto anche "funzione", è un predicato che, completato con degli "argomenti" contenuti tra parentesi, fornisce un risultato.
+
+La sintassi tipica del comando è:
+
+`comando(argomento1,argomento2,etc.)`
+
+Nella sintassi tipica, molti argomenti del comando sono applicati di default. Se si vogliono cambiare queste opzioni di default, la sintassi estesa del comando è:
+
+```
+comando(ruolo_di_argomento = argomento1,
+        ruolo_di_argomento = argomento2,
+        etc.)
+```
+
+Nel dialetto Tidyverse, si incanalano diversi argomenti per volta con l'operatore `%>%`, quindi la sintassi diventa:
+
+```
+soggetto %>% comando(argomento_di_1) %>%
+             comando2(argomento_di_2)
+```
+
+L'operatore pipe (intubatore) porta il soggetto del comando automaticamente come primo argomento del comando. In certi casi si vuole usare una pipe per l'argomento n-esimo di un comando. In questi casi bisogna combinare `%>%` con un puntino `.`.
+
+```{r}
+"mamma" %>% str_detect("La mamma ha comprato il pane",.)
+"mamma" %>% str_detect("La mamma ha comprato il pane")
+```
+
+# Operatori algebrici
+
+- SOMMA
+
+La abbiamo già incontrata col simbolo `+` tra due numeri.
+Si può anche sommare un intero vettore numerico.
+```{r}
+sum(1:10)
+
+sum(1,5,15,66)
+```
+
+- SOTTRAZIONE
+
+Abbastanza scontato:
+
+```{r}
+10 - 2
+
+5 - 8
+
+-2 - 10
+```
+
+- MOLTIPLICAZIONE, DIVISIONE, POTENZA E RADICE
+
+```{r}
+2*2
+
+10/5
+
+10/3
+
+0/100
+
+100/0
+
+0/0
+
+2^8
+
+```
+- LOGARITMI (molto utili)
+
+```{r}
+
+#logaritmo naturale
+
+log(10)
+
+#logaritmo in base 2
+
+log2(100)
+
+#logaritmo in base 10
+
+log10(100)
+
+#logaritmo in base "x"
+
+x <- 5
+
+log(19,x)
+
+```
+# Operatori logici di interrogazione
+
+Alcuni li abbiamo già visti:
+
+- Interrogazione di equazione: i due argomenti dell'operatore sono lo stesso valore?
+
+- Interrogazione di negazione: i due argomenti sono diversi?
+
+- Interrogazione di comparazione: più grande o più piccolo?
+
+```{r}
+# Occhio al doppio uguale!
+4 == 4
+2*2 == 4
+
+2*5 == 4
+
+str_length("mamma") == 5
+length(0:10) == 10
+
+# Negazione
+
+3 != 5
+
+# Comparazione
+
+3 > 1:10
+3 >= 1:10
+
+5 < 6
+5 <= 4:6
+```
+`!` è un simbolo particolare che si usa per negare praticamente qualsiasi cosa. A volte l'interpretazione non è immediata:
+
+```{r}
+!3 > 5
+```
+
+- "Quandificatore"
+
+L'operatore quandificatore `%in%` è una estensione dell'interrogazione di equazione e di negazione. Infatti compara un valore o un vettore contro un altro vettore e restituisce `TRUE` **quando** l'argomento a sinistra del quandificatore è contenuto * almeno una volta* nel vettore a destra.
+
+```{r}
+3 %in% 1:10
+1:10 %in% 3
+
+"mamma" %in% "La mamma è a casa"
+c("mamma","papà") %in% c("mamma","papà","figlio")
+```
+
+Una operazione utile è di applicare la sommatoria al quandificatore, così da ottenere un "quantificatore". Quante volte succede questo?
+
+```{r}
+(c("mamma","papà") %in% c("mamma","papà","figlio")) %>% sum()
+
+# è anche possibile calcolare una frequenza sul numero possibile di volte
+
+c("mamma","papà","figlio") -> famiglia
+
+(c("mamma","papà") %in% famiglia) %>% sum() /
+  length(famiglia)
+
+```
+
+
+## Condizioni
+
+Una interrogazione può essere valutata come condizione di attivazione di un risultato condizionato del tipo
+
+**SE** *questa cosa è VERA* **ALLORA** *dammi questo risultato*
+
+```{r}
+ifelse(1:3 >= 3,"mamma","papà")
+```
+
+---
+`ifelse` non è l'unica condizione applicabile. Spesso ricorre il comando `case_when` che significa "nel caso in cui", che si usa comunemente per condizionare risultati a variabili ordinali (factor)
+---
+
+### Lunghezze
+
+```{r}
+length(0:10)
+
+length(tibble(Nomi = c("Pippo","Paperino")))
+
+# Perché la length della tibble è 1 e non 2?
+
+nrow(tibble(Nomi = c("Pippo","Paperino")))
+```
+```{r}
+# Contare numero di simboli alfanumerici in una stringa character
+str_length("mamma")
+
+# Contare quante volte un simbolo ricorre in una stringa
+str_count("mamma","a")
+
+# Contare il numero di parole
+str_count("mamma","\\w+")
+
+str_count("La mamma è andata al mercato","\\w+")
+
+# Occhio all'uso degli apostrofi
+str_count("L'aria è pulita, qui","\\w+")
+```
+
+# Operazioni testuali
+
+La maggior parte delle operazioni testuali in dialetto Tidyverse iniziano con `str_`. Ce ne sono molte altre, ma queste sono quelle essenziali.
+
+- Concatenare stringhe
+
+```{r}
+str_c("la mamma","è andata","al mercato")
+
+x <- 3
+str_c("La mamma ha comprato ",x," mele.")
+```
+
+- Pulizia
+
+```{r}
+"La Mam£ma è£ and£ata al merca£to" %>%
+  str_remove_all("£")
+
+"    La mamma è   andata al   mercato...  "
+
+"    La mamma è   andata al   mercato...  " %>% str_squish()
+```
+Se vi serve una funzione per interagire con le parole, caricate tidyverse poi iniziate a scrivere `str_` e vedete se trovate quello che cercate. Vi consiglio di googlare in inglese quello che vi serve, inserendo la parola "stringr" nella query di ricerca.
+
+# Comandi statistici
+
+I COMANDI SI ESEGUONO SEMPRE SU VETTORI NUMERICI. L'argomento deve sempre essere correttamente formattato come vettore numerico!
+
+- Media e mediana
+
+```{r}
+1:10 %>% mean()
+
+c(1,2,3) %>% mean()
+
+c(1,1,2,3,6,8,10) %>% median()
+```
+
+```{r eval=FALSE}
+1,2,3 %>% mean()
+```
+
+- Varianza e deviazione standard
+
+```{r}
+1:100 %>% var()
+1:100 %>% sd()
+
+1:100 %>% sd() == (1:100 %>% var()) %>% sqrt()
+```
+- Quantili
+
+```{r}
+#rnorm genera una quantitò pari al primo argomento di
+# numeri casuali da una distribuzione normale di
+# media pari al secondo argomento, con deviazione standard
+# pari al terzo argomento
+
+quantile(rnorm(1000,10,10),c(.25,.5,.6,.9))
+```
+
+- Correlazione
+
+```{r}
+Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Statura e pulsazioni.xls")
+
+cor(Dati$Statura,Dati$Pulsazioni)
+
+cor(Dati$Pulsazioni,Dati$Statura)
+
+```
+- Regressione
+
+Tidyverse aiuta moltissimo l'interpretazione e la visualizzazione delle tabelle di regressione, in particolare per le regressioni multiple. In questi casi ci faremo coadiuvare da un pacchetto periferico ma molto simpatico, "broom".
+
+```{r}
+pacman::p_load(broom)
+Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Soddisfazione del paziente.xls")
+
+Dati %>%
+  lm(data = .,
+     Soddisfazione ~ Età + `Indice di gravità malattia` + `Indice di ansietà`) %>% tidy()
+
+Dati %>%
+  lm(data = .,
+     Soddisfazione ~ Età + `Indice di gravità malattia` + `Indice di ansietà`) %>%
+  tidy() %>%
+  mutate_if(is.numeric,round,3)
+
+Dati %>%
+  lm(data = .,
+     scale(Soddisfazione) ~
+       scale(Età) +
+       scale(`Indice di gravità malattia`) +
+       scale(`Indice di ansietà`)
+     ) %>%
+  tidy() %>%
+  mutate_if(is.numeric,round,3) %>%
+  select(-statistic)
+
+```

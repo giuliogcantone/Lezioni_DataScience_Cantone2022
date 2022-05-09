@@ -1,0 +1,173 @@
+---
+title: "Maneggiare il formato tabellare"
+output: github_document
+---
+
+# Il formato tibble si può maneggiare con poche funzioni fondamentali
+
+- `filter`: Restringe la tabella a solo certe righe che rispettano una condizione
+- `select`: Seleziona solo certe colonne
+- `pull`: Estrae i soli dati di una colonna, lasciando perdere i metadati (ad esempio, il nome della variabile incolonnata)
+- `mutate`: aggiunge o sostituisce una colonna, in funzione di una o più colonne pre-esistenti
+- `group_by` e `summarise`: applica una funzione sommario a tutta la tabella oppure, in combinazione con `group_by`, fornisce l'indice sommario per dei gruppi individuati.
+- I 'join' servono a prendere una o più colonne da una tabella ed innestarle in un altra secondo un criterio di corrispondenza rispetto a una o più colonne i comune tra le due tabelle.
+- Gli `anti_join` servono a filtrare via valori da una tabella in corrispondenza di valori di una o più colonne in comune tra le due tabelle. L'anti-join è una sorta di filtro avanzato tra tabelle, in cui una tabella ne nega una seconda.
+- `pivot_longer` e `pivot_wider`
+
+## Filtrare e selezionare i dati
+
+```{r}
+Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Soddisfazione del paziente.xls")
+
+Dati %>% filter(Età < 30) -> Giovani
+Giovani
+
+Giovani %>% select(Soddisfazione, `Indice di ansietà`)
+
+Giovani %>% pull(Soddisfazione)
+
+```
+
+## Mutate
+
+Mutate è forse il comando più ricco e potente, vediamolo subito in azione.
+
+```{r}
+tibble(Valore_1 = c(10,12,14),
+       Valore_2 = c(3,5,0)) %>%
+  mutate(Somma = Valore_1 + Valore_2,
+         Differenza = Valore_1 - Valore_2)
+
+# Mutate si può usare sia con argomenti "mobili" come nel caso sopra, sia con argomenti a valore fisso. Questo è utile per calcolare proporzioni.
+
+tibble(Valore = sample.int(20,10)) %>%
+  mutate(SOMMA = sum(Valore),
+         Percentuale = Valore/SOMMA) %>%
+  mutate_if(is.numeric,round,3)
+
+```
+
+## Dai valori continui ai valori discreti ordinati (variabili ordinali)
+
+`mutate` in combinazione con le funzioni `cut_`.
+
+Le funzioni `cut_` restituiscono sempre dei `factor`, cioé variabili ordinali. Questo è utile per la visualizzazione, per esempio per ordinare automaticamente le legende dei grafici.
+
+```{r}
+Test_ingresso <- readxl::read_excel("base_dati_CICCHITELLI_excel/Test d'ingresso.xls")
+
+Test_ingresso %>% mutate(
+  Classe_voto_test = `Test d'ingresso` %>% as.numeric %>% cut_interval(3)
+)
+
+Test_ingresso %>% mutate(
+  Classe_voto_test = `Test d'ingresso` %>% as.numeric %>% cut_interval(3,labels = c("Basso","Medio","Alto"))
+) -> Test_ingresso
+
+Test_ingresso
+
+```
+
+
+## Statistiche sommario e gruppi
+
+```{r}
+
+Test_ingresso %>% group_by(`Test d'ingresso`) %>%
+  summarise(Media_voto_finale = mean(`Valutazione fine primo anno`),
+            n = n())
+
+# n() è una funzione speciale che funziona solo dentro summarize.
+# Conta il numero di osservazioni, come nrow()
+
+Test_ingresso %>% group_by(Classe_voto_test) %>%
+  summarise(Media_voto_finale = mean(`Valutazione fine primo anno`),
+            n = n())
+```
+
+**Domanda**: La tabella sommario rispetta il dogma tidyverse?
+Sì? No? Perché?
+
+# Joins
+
+L'idea del Join è in verità più semplice di quanto sembri:
+
+```{r}
+tibble(Cognome = c("Rossi", "Verdi","Rossi","Esposito"),
+       Nome = c("Mario","Giovanni","Carla","Carmela"),
+       Età = c(54,22,50,38)) -> Utenti
+
+tibble(Famiglia = c("Rossi","Verdi","Esposito"),
+       Civico = c("1","2","3")) -> Case
+
+Utenti
+Case
+
+full_join(Utenti,Case %>% rename(Cognome = Famiglia),
+          by="Cognome")
+```
+
+
+
+
+## Anti-join, un filtro avanzato
+
+Il miglior modo di capire l'anti-join è introdurre un pacchetto avanzato per l'analisi testuale, `tidytext`. Tidytext prende un testo e lo trasforma in una `tibble`. Possiamo scaricare testi storici grazie al pacchetto `gutenbergr`.
+
+```{r}
+pacman::p_load("tidytext")
+pacman::p_load("gutenbergr")
+
+gutenberg_metadata %>%
+  group_by(language) %>%
+  count()
+
+gutenberg_metadata %>%
+  filter(language == "it",
+         title %>% str_detect("Sicil")
+         )
+
+```
+
+```{r eval=FALSE}
+gutenberg_metadata %>%
+  filter(language == "it",
+         title %>% str_detect("Sicil")
+         ) %>%
+           View()
+```
+
+```{r}
+gutenberg_download(30984) -> Sicilia
+
+Sicilia[199,]
+
+Sicilia[201,]
+```
+
+```{r}
+Sicilia %>%
+  tidytext::unnest_tokens(word,text) -> Sicilia_t
+
+Sicilia_t
+
+Sicilia_t %>%
+  group_by(word) %>%
+  count() %>% arrange(-n)
+
+Sicilia_t %>%
+  anti_join(get_stopwords("it")) %>%
+  group_by(word) %>%
+  count() %>% arrange(-n)
+```
+
+
+# Pivot
+
+Pivot su Tidyverse significa una cosa un po' diversa da "pivot" su Excel.
+In concreto, la tabella pivot di Excel è l'equivalente della tabella sommario su Tidyverse.
+
+Il pivoting su Tydiverse serve a trasformare una classe di valori in una tabella.
+
+Il pivoting non è particolarmente essenziale nell'introduzione a R Tiduyverse, ma rimane una skill importante per un Data Scientist.
+Recentemente è uscita una [ottima guida](https://r4ds.hadley.nz/data-tidy.html) da parte del creatore/capo designer di Tidyverse.

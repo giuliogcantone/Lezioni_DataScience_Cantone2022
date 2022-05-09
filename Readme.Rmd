@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is the teaching materials repository for:
 
-* Introduction to Data Science with R Tidyverse, for Social Research
+* Introduction to Data Science with R Tidyverse for Research
 
 for University of Catania, Department of Political and Social Sciences, Spring 2022.
 
@@ -17,7 +17,7 @@ for University of Catania, Department of Political and Social Sciences, Spring 2
 
 Questo è l'hub del materiale didattico per il seminario:
 
-* Introduzione alla Data Science con R Tidyverse, per la Ricerca Sociale
+* Introduzione alla Data Science con R Tidyverse, per la Ricerca Scientifica
 
 per il Dipartimento di Science Politiche e Sociali dell'Università di Catania, Secondo Semestre 2022.
 
@@ -120,11 +120,11 @@ Il linguaggio equivalente per la scrittura di articoli scientifici si chiama Lat
 Il Seminario si compone di 6 Lezioni:
 
 1. Formati e strutture dati elementari su R
-2. Comandi di calcolo aritmatico e logico
-3. Organizzazione nel formato tabellare
-4. Principi di automazione dei comandi
-5. Tecniche di visualizzazione
-6. Tecniche di analisi multivariata
+2. Comandi di calcolo algebrico, logico-testuale e statistico
+3. Maneggiare il formato tabellare
+4. Visualizzazione grafica
+5. Principi di automazione dei comandi
+6. Tecniche avanzate di acquisizione dati
 
 Che troverete a [questo link](ciao)
 
