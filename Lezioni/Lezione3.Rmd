@@ -7,12 +7,12 @@ output: github_document
 
 - `filter`: Restringe la tabella a solo certe righe che rispettano una condizione
 - `select`: Seleziona solo certe colonne
-- `pull`: Estrae i soli dati di una colonna, lasciando perdere i metadati (ad esempio, il nome della variabile incolonnata)
-- `mutate`: aggiunge o sostituisce una colonna, in funzione di una o più colonne pre-esistenti
+- `pull`: Estrae i soli dati di una colonna, lasciando perdere i metadati (ad esempio, il nome della variabile incolonnata).
+- `mutate`: aggiunge o sostituisce una colonna, in funzione di una o più colonne pre-esistenti (una versione alternativa è `transmute`)
 - `group_by` e `summarise`: applica una funzione sommario a tutta la tabella oppure, in combinazione con `group_by`, fornisce l'indice sommario per dei gruppi individuati.
-- I 'join' servono a prendere una o più colonne da una tabella ed innestarle in un altra secondo un criterio di corrispondenza rispetto a una o più colonne i comune tra le due tabelle.
+- I 'joins' servono a prendere una o più colonne da una tabella ed innestarle in un altra secondo un criterio di corrispondenza rispetto a una o più colonne i comune tra le due tabelle.
 - Gli `anti_join` servono a filtrare via valori da una tabella in corrispondenza di valori di una o più colonne in comune tra le due tabelle. L'anti-join è una sorta di filtro avanzato tra tabelle, in cui una tabella ne nega una seconda.
-- `pivot_longer` e `pivot_wider`
+- `pivot_longer` e `pivot_wider` servono a ristrutturare tabelle trasformando colonne in valori e vice-versa. (Operazione considerata piuttosto tortuosa)
 
 ## Filtrare e selezionare i dati
 
@@ -46,6 +46,13 @@ tibble(Valore = sample.int(20,10)) %>%
   mutate_if(is.numeric,round,3)
 
 ```
+
+`mutate` è un comando molto flessibile perché *tende* a funzionare sia con mutazioni fisse, sia con mutazioni dinamiche parallele.
+
+---
+mutazione dinamica parallela: riguardate le tabelle sopra.
+`SOMMA` è una variabile dinamica il cui valore cambia al cambiare di altre due variabili incolonnate.
+---
 
 ## Dai valori continui ai valori discreti ordinati (variabili ordinali)
 
@@ -88,6 +95,31 @@ Test_ingresso %>% group_by(Classe_voto_test) %>%
 **Domanda**: La tabella sommario rispetta il dogma tidyverse?
 Sì? No? Perché?
 
+### Un trucco per fare "mutate condizionali" su statistiche di gruppo
+
+Usare `group_by` insieme a `mutate`...
+
+```{r}
+Test_ingresso %>%
+  group_by(Classe_voto_test) %>%
+  mutate(Deviazione =
+           `Valutazione fine primo anno` -
+           mean(`Valutazione fine primo anno`)
+  ) %>% select(Classe_voto_test, Deviazione) %>%
+  arrange(Classe_voto_test) %>% View()
+```
+
+Questo codice si può capire meglio riprodotto con dati reali
+
+```{r eval=F}
+tibble(Nome = c(Giulio,...,...),
+       Genere = c(M,...),
+       Altezza = (180,...)) %>%
+  group_by(Genere) %>%
+  mutate(Deviazione_ragionata =
+           Altezza - mean(Altezza))
+```
+
 # Joins
 
 L'idea del Join è in verità più semplice di quanto sembri:
@@ -110,7 +142,7 @@ full_join(Utenti,Case %>% rename(Cognome = Famiglia),
 
 
 
-## Anti-join, un filtro avanzato
+# Anti-join, un filtro avanzato, utile nelle analisi testuali
 
 Il miglior modo di capire l'anti-join è introdurre un pacchetto avanzato per l'analisi testuale, `tidytext`. Tidytext prende un testo e lo trasforma in una `tibble`. Possiamo scaricare testi storici grazie al pacchetto `gutenbergr`.
 

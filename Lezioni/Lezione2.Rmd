@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 pacman::p_load("tidyverse")
 ```
 
-# Definizione di comando ed "pipes" di Tydiverse
+# Ora definiamo "comando", e poi definiamo la "pipeline" di Tydiverse
 
 Un comando, detto anche "funzione", è un predicato che, completato con degli "argomenti" contenuti tra parentesi, fornisce un risultato.
 
@@ -27,6 +27,10 @@ comando(ruolo_di_argomento = argomento1,
         ruolo_di_argomento = argomento2,
         etc.)
 ```
+
+NOTA l'uso di `=` per gli ARGOMENTI, NON PER LE ASSEGNAZIONI.
+
+# Operatore PIPE, o INCANALATORE o INTUBATORE
 
 Nel dialetto Tidyverse, si incanalano diversi argomenti per volta con l'operatore `%>%`, quindi la sintassi diventa:
 
@@ -54,6 +58,19 @@ sum(1:10)
 sum(1,5,15,66)
 ```
 
+- SOMMA CUMULATIVA
+
+```{r}
+cumsum(1:10)
+
+# Nota la definizione come vettore... ma perché qui è richiesto l'ordine???
+cumsum(c(1,5,15,66))
+
+# Utile per calcolare le funzioni cumulative in statistica descrittiva
+
+```
+
+
 - SOTTRAZIONE
 
 Abbastanza scontato:
@@ -69,7 +86,10 @@ Abbastanza scontato:
 - MOLTIPLICAZIONE, DIVISIONE, POTENZA E RADICE
 
 ```{r}
+
 2*2
+
+# Divisioni possibili ed impossibili
 
 10/5
 
@@ -81,7 +101,11 @@ Abbastanza scontato:
 
 0/0
 
+# potenze
 2^8
+
+# Cosa è questo?
+2^-1
 
 ```
 - LOGARITMI (molto utili)
@@ -139,10 +163,17 @@ length(0:10) == 10
 5 < 6
 5 <= 4:6
 ```
-`!` è un simbolo particolare che si usa per negare praticamente qualsiasi cosa. A volte l'interpretazione non è immediata:
+
+`!` è un simbolo particolare che si usa per negare praticamente qualsiasi cosa. A volte l'interpretazione non è affatto immediata:
 
 ```{r}
 !3 > 5
+
+(!3 > 5) == !(3>5)
+
+(!4 > 5) == !(3>5)
+
+# Trovo che qui la logica sia un po' contorta...
 ```
 
 - "Quandificatore"
@@ -156,6 +187,8 @@ L'operatore quandificatore `%in%` è una estensione dell'interrogazione di equaz
 "mamma" %in% "La mamma è a casa"
 c("mamma","papà") %in% c("mamma","papà","figlio")
 ```
+
+### SOMMA E QUANDIFICATORE = QUANTIFICATORE
 
 Una operazione utile è di applicare la sommatoria al quandificatore, così da ottenere un "quantificatore". Quante volte succede questo?
 
@@ -183,7 +216,8 @@ ifelse(1:3 >= 3,"mamma","papà")
 ```
 
 ---
-`ifelse` non è l'unica condizione applicabile. Spesso ricorre il comando `case_when` che significa "nel caso in cui", che si usa comunemente per condizionare risultati a variabili ordinali (factor)
+`ifelse` non è l'unica condizione applicabile. Spesso ricorre il comando `case_when` che significa "nel caso in cui", che si usa comunemente per condizionare risultati a variabili ordinali (factor).
+Non sarà trattato in queste lezioni.
 ---
 
 ### Lunghezze
@@ -238,9 +272,36 @@ str_c("La mamma ha comprato ",x," mele.")
 ```
 Se vi serve una funzione per interagire con le parole, caricate tidyverse poi iniziate a scrivere `str_` e vedete se trovate quello che cercate. Vi consiglio di googlare in inglese quello che vi serve, inserendo la parola "stringr" nella query di ricerca.
 
-# Comandi statistici
 
-I COMANDI SI ESEGUONO SEMPRE SU VETTORI NUMERICI. L'argomento deve sempre essere correttamente formattato come vettore numerico!
+### Trovare la posizione
+
+```{r}
+# posizione della sottostringa
+str_locate_all("La Mamma è andata al mercato","è")
+
+# Quando la stringa "pattern" è contenuta nella stringa argomento
+str_which(c("La Mamma è andata al mercato",
+            "Il Papà è andato al mercato",
+            "Mia sorella è andata al mercato"),
+          "andata")
+```
+Comando `word()`
+
+```{r}
+
+word("La mamma è andata al mercato",4)
+
+word("La mamma è andata al mercato",c(1,4))
+
+word("La mamma è andata al mercato",c(1,2,5,6)) %>%
+  str_flatten(collapse = " ")
+```
+
+### Espressioni regolari...
+
+https://github.com/rstudio/cheatsheets/blob/main/strings.pdf
+
+# Comandi statistici
 
 - Media e mediana
 
@@ -264,6 +325,7 @@ c(1,1,2,3,6,8,10) %>% median()
 
 1:100 %>% sd() == (1:100 %>% var()) %>% sqrt()
 ```
+
 - Quantili
 
 ```{r}
@@ -275,14 +337,46 @@ c(1,1,2,3,6,8,10) %>% median()
 quantile(rnorm(1000,10,10),c(.25,.5,.6,.9))
 ```
 
+## Il problema dei missing values nei comandi statistici.
+
+Il comandi statistici hanno un risultato non funzionano correttamente se rilevano dei missing values nei vettori argomento. Di solito questo di risolve con un secondo argomento che specifica di omettere i missing values.
+
+```{r}
+mean(c(1,2,NA,10,12), na.rm = F)
+mean(c(1,2,NA,10,12), na.rm = T)
+
+var(c(1,2,NA,10,12))
+
+var(c(1,2,NA,10,12, na.rm = T))
+```
+# Correlazione e regressione
+
 - Correlazione
 
 ```{r}
 Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Statura e pulsazioni.xls")
 
+
+# Correlazioni lineari
 cor(Dati$Statura,Dati$Pulsazioni)
 
 cor(Dati$Pulsazioni,Dati$Statura)
+
+# Valori NA nelle correlazioni
+
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204))
+
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204),
+    use = "complete.obs")
+
+### Correlazioni di Rango (non lineari)
+
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204),
+    use = "complete.obs",
+    method = "kendall")
 
 ```
 - Regressione

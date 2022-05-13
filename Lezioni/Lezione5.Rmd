@@ -1,0 +1,123 @@
+---
+title: "Principi di automazione dei comandi ed alcune tecniche avanzate di Data Science"
+output: github_document
+---
+
+# Cicli for (loops)
+
+La struttura di un ciclo for è particolare.
+
+- Inizia sempre con la parola `for` seguita da parentesi tonde,
+- seguita da un termine arbitrario, di solito si usa `i`
+- seguito dalla parola `in`,
+- infine, un vettore numerico di "volte" OPPURE
+- un vettore di oggetti di riferimento
+- Un intero codice tra parentesi quadre
+
+```{r}
+#Succede che i valori del vettore di riferimento si andranno
+# A sostituire iterativamente a quando "i" appare nel codice
+# tra parentesi. Iterativamente: il codice viene ripetutamente
+# eseguito per tutta la lunghezza (lenght()) del vettore riferimento
+# ed ogni volta la "i" diventa l'elemento in quella posizione
+# del vettore
+
+for (i in 1:10) {print(i)}
+
+for (i in c("Mamma", "Papà", "Carla")) {print(i)}
+
+for (i in c("Mamma", "Papà", "Carla")) {
+  print(str_c("Ho lasciato le chiavi a ",i)
+        )}
+```
+
+# Funzione map_*() di Tidyverse
+
+Abbiamo studiato che il comando `mutate` riesce ad interpretare alcune automazioni dinamiche, specialmente le automazioni dinamiche parallele.
+In alcuni casi questa interpretazione fallisce.
+
+Di solito questo succede perché il valore dinamico non è presente nella tabella ma è una funzione di solo una selezione di valori incolonnati.
+
+Ci sono diverse strade da percorrere per queste operazioni, `map_*()` non è necessariamente la migliore ma è un comando che va conosciuto perché una volta messo per iscritto rende molto interpretabile cosa fa il nostro codice. Inoltre, `map_*()` è un comando molto veloce.
+
+Prima di tutto, non esiste un solo `map`. Esiste un `map_*` per ogni classe di output, quindi bisogna scrivere la classe di output al posto dell'asterisco
+
+- `map_dbl()` numeri con la virgola
+- `map_int()` numeri interi
+- `map2_chr()` stringhe
+
+La sintassi di map ha due argomenti fondamentali.
+La partciolarità è che questi argomenti tendono ad avere dei sotto-argomenti, perché...
+
+- Il primo argomento deve essere una colonna
+- Il secondo argomento deve essere
+-- O una funzione, cioé un comando
+-- Oppure una `formula`
+
+Eppure, in pratica, funzioni e comandi sono praticamente la stessa cosa. Studieremo solo la modalità con formule perchè è più semplice. La caratteristica saliente delle formule è che iniziano sempre per `~`.
+
+
+```{r}
+
+# notate che per richiamare il valore iterato nella colonna della varibile Numeri, invoco uno strano simbolo, cioé:
+
+# .x
+
+# dove abbiamo già visto il simbolo ~?
+
+tibble(Numeri = c(1:10)) %>%
+  mutate(Logaritmo_2 = map_dbl(
+    Numeri,
+    ~.x/2
+    )
+  )
+
+
+```
+
+# Automazione parallela e multivariabile
+
+Introduciamo `map2_*()`. Questa variabile di map ha 3 argomenti principali: due colonne ed una formula che le lega.
+
+
+```{r}
+
+# notate che per richiamare il valore iterato nella colonna della varibile Numeri, invoco uno strano simbolo, cioé:
+
+# .x
+
+# dove abbiamo già visto il simbolo ~?
+
+tibble(Numeri_1 = c(1:10),
+       Numeri_2 = c(291:300)
+       ) %>%
+  mutate(SOMMA = map2_dbl(
+    Numeri_1,
+    Numeri_2,
+    ~.x+.y
+    )
+  )
+
+
+###
+
+tibble(
+  Quando = sample(c("Oggi","Ieri"),10, replace = T),
+  Chi = sample(c("Alice","Roberto"),10,replace = T)
+) %>%
+  mutate(
+    Accaduto = map2_chr(
+    Quando,
+    Chi,
+    ~str_c(.x," ho accompagnato ",.y," al cinema.")
+    )
+  )
+  
+
+```
+
+E se volessi aggiungere un terzo elemento "mutabile" nel mio map?
+
+Per questo esiste pmap_*(), ma...
+
+...richiede di saper usare le liste, che non sono coperte da queste lezioni. Vi importa sapere che si può fare.
