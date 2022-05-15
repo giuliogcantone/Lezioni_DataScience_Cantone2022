@@ -3,6 +3,16 @@ title: "Maneggiare il formato tabellare"
 output: github_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pacman::p_load("tidyverse")
+```
+
+
 # Il formato tibble si può maneggiare con poche funzioni fondamentali
 
 - `filter`: Restringe la tabella a solo certe righe che rispettano una condizione

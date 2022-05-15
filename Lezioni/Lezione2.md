@@ -1,7 +1,7 @@
 Comandi di calcolo algebrico, logico-testuale e statistico
 ================
 
-# Definizione di comando ed “pipes” di Tydiverse
+# Ora definiamo “comando”, e poi definiamo la “pipeline” di Tydiverse
 
 Un comando, detto anche “funzione”, è un predicato che, completato con
 degli “argomenti” contenuti tra parentesi, fornisce un risultato.
@@ -17,6 +17,10 @@ estesa del comando è:
     comando(ruolo_di_argomento = argomento1,
             ruolo_di_argomento = argomento2,
             etc.)
+
+NOTA l’uso di `=` per gli ARGOMENTI, NON PER LE ASSEGNAZIONI.
+
+# Operatore PIPE, o INCANALATORE o INTUBATORE
 
 Nel dialetto Tidyverse, si incanalano diversi argomenti per volta con
 l’operatore `%>%`, quindi la sintassi diventa:
@@ -60,6 +64,25 @@ sum(1,5,15,66)
 
     ## [1] 87
 
+-   SOMMA CUMULATIVA
+
+``` r
+cumsum(1:10)
+```
+
+    ##  [1]  1  3  6 10 15 21 28 36 45 55
+
+``` r
+# Nota la definizione come vettore... ma perché qui è richiesto l'ordine???
+cumsum(c(1,5,15,66))
+```
+
+    ## [1]  1  6 21 87
+
+``` r
+# Utile per calcolare le funzioni cumulative in statistica descrittiva
+```
+
 -   SOTTRAZIONE
 
 Abbastanza scontato:
@@ -91,6 +114,8 @@ Abbastanza scontato:
     ## [1] 4
 
 ``` r
+# Divisioni possibili ed impossibili
+
 10/5
 ```
 
@@ -121,10 +146,18 @@ Abbastanza scontato:
     ## [1] NaN
 
 ``` r
+# potenze
 2^8
 ```
 
     ## [1] 256
+
+``` r
+# Cosa è questo?
+2^-1
+```
+
+    ## [1] 0.5
 
 -   LOGARITMI (molto utili)
 
@@ -239,13 +272,29 @@ length(0:10) == 10
     ## [1] FALSE  TRUE  TRUE
 
 `!` è un simbolo particolare che si usa per negare praticamente
-qualsiasi cosa. A volte l’interpretazione non è immediata:
+qualsiasi cosa. A volte l’interpretazione non è affatto immediata:
 
 ``` r
 !3 > 5
 ```
 
     ## [1] TRUE
+
+``` r
+(!3 > 5) == !(3>5)
+```
+
+    ## [1] TRUE
+
+``` r
+(!4 > 5) == !(3>5)
+```
+
+    ## [1] TRUE
+
+``` r
+# Trovo che qui la logica sia un po' contorta...
+```
 
 -   “Quandificatore”
 
@@ -279,15 +328,27 @@ c("mamma","papà") %in% c("mamma","papà","figlio")
 
     ## [1] TRUE TRUE
 
-|                                                                                                                                         |
-|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Una operazione utile è di applicare la sommatoria al quandificatore, così da ottenere un “quantificatore”. Quante volte succede questo? |
-| `r (c("mamma","papà") %in% c("mamma","papà","figlio")) %>% sum()`                                                                       |
-| `## [1] 2`                                                                                                                              |
-| \`\`\`r \# è anche possibile calcolare una frequenza sul numero possibile di volte                                                      |
-| c(“mamma”,“papà”,“figlio”) -&gt; famiglia                                                                                               |
-| (c(“mamma”,“papà”) %in% famiglia) %&gt;% sum() / length(famiglia) \`\`\`                                                                |
-| `## [1] 0.6666667`                                                                                                                      |
+### SOMMA E QUANDIFICATORE = QUANTIFICATORE
+
+Una operazione utile è di applicare la sommatoria al quandificatore,
+così da ottenere un “quantificatore”. Quante volte succede questo?
+
+``` r
+(c("mamma","papà") %in% c("mamma","papà","figlio")) %>% sum()
+```
+
+    ## [1] 2
+
+``` r
+# è anche possibile calcolare una frequenza sul numero possibile di volte
+
+c("mamma","papà","figlio") -> famiglia
+
+(c("mamma","papà") %in% famiglia) %>% sum() /
+  length(famiglia)
+```
+
+    ## [1] 0.6666667
 
 ## Condizioni
 
@@ -302,9 +363,10 @@ ifelse(1:3 >= 3,"mamma","papà")
 
     ## [1] "papà"  "papà"  "mamma"
 
-|                                                                                                                                                                                                       |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ifelse` non è l’unica condizione applicabile. Spesso ricorre il comando `case_when` che significa “nel caso in cui”, che si usa comunemente per condizionare risultati a variabili ordinali (factor) |
+|                                                                                                                                                                                                        |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ifelse` non è l’unica condizione applicabile. Spesso ricorre il comando `case_when` che significa “nel caso in cui”, che si usa comunemente per condizionare risultati a variabili ordinali (factor). |
+| Non sarà trattato in queste lezioni.                                                                                                                                                                   |
 
 ### Lunghezze
 
@@ -409,10 +471,53 @@ tidyverse poi iniziate a scrivere `str_` e vedete se trovate quello che
 cercate. Vi consiglio di googlare in inglese quello che vi serve,
 inserendo la parola “stringr” nella query di ricerca.
 
-# Comandi statistici
+### Trovare la posizione
 
-I COMANDI SI ESEGUONO SEMPRE SU VETTORI NUMERICI. L’argomento deve
-sempre essere correttamente formattato come vettore numerico!
+``` r
+# posizione della sottostringa
+str_locate_all("La Mamma è andata al mercato","è")
+```
+
+    ## [[1]]
+    ##      start end
+    ## [1,]    10  10
+
+``` r
+# Quando la stringa "pattern" è contenuta nella stringa argomento
+str_which(c("La Mamma è andata al mercato",
+            "Il Papà è andato al mercato",
+            "Mia sorella è andata al mercato"),
+          "andata")
+```
+
+    ## [1] 1 3
+
+Comando `word()`
+
+``` r
+word("La mamma è andata al mercato",4)
+```
+
+    ## [1] "andata"
+
+``` r
+word("La mamma è andata al mercato",c(1,4))
+```
+
+    ## [1] "La"     "andata"
+
+``` r
+word("La mamma è andata al mercato",c(1,2,5,6)) %>%
+  str_flatten(collapse = " ")
+```
+
+    ## [1] "La mamma al mercato"
+
+### Espressioni regolari…
+
+<https://github.com/rstudio/cheatsheets/blob/main/strings.pdf>
+
+# Comandi statistici
 
 -   Media e mediana
 
@@ -457,3 +562,157 @@ c(1,1,2,3,6,8,10) %>% median()
 ```
 
     ## [1] TRUE
+
+-   Quantili
+
+``` r
+#rnorm genera una quantitò pari al primo argomento di
+# numeri casuali da una distribuzione normale di
+# media pari al secondo argomento, con deviazione standard
+# pari al terzo argomento
+
+quantile(rnorm(1000,10,10),c(.25,.5,.6,.9))
+```
+
+    ##       25%       50%       60%       90% 
+    ##  2.903127  9.963340 12.450681 22.962643
+
+## Il problema dei missing values nei comandi statistici.
+
+Il comandi statistici hanno un risultato non funzionano correttamente se
+rilevano dei missing values nei vettori argomento. Di solito questo di
+risolve con un secondo argomento che specifica di omettere i missing
+values.
+
+``` r
+mean(c(1,2,NA,10,12), na.rm = F)
+```
+
+    ## [1] NA
+
+``` r
+mean(c(1,2,NA,10,12), na.rm = T)
+```
+
+    ## [1] 6.25
+
+``` r
+var(c(1,2,NA,10,12))
+```
+
+    ## [1] NA
+
+``` r
+var(c(1,2,NA,10,12, na.rm = T))
+```
+
+    ## [1] NA
+
+# Correlazione e regressione
+
+-   Correlazione
+
+``` r
+Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Statura e pulsazioni.xls")
+
+
+# Correlazioni lineari
+cor(Dati$Statura,Dati$Pulsazioni)
+```
+
+    ## [1] 0.2182248
+
+``` r
+cor(Dati$Pulsazioni,Dati$Statura)
+```
+
+    ## [1] 0.2182248
+
+``` r
+# Valori NA nelle correlazioni
+
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204))
+```
+
+    ## [1] NA
+
+``` r
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204),
+    use = "complete.obs")
+```
+
+    ## [1] 0.7075261
+
+``` r
+### Correlazioni di Rango (non lineari)
+
+cor(c(1,5,6,8,NA,10),
+    c(103,67,NA,208,110,2204),
+    use = "complete.obs",
+    method = "kendall")
+```
+
+    ## [1] 0.6666667
+
+-   Regressione
+
+Tidyverse aiuta moltissimo l’interpretazione e la visualizzazione delle
+tabelle di regressione, in particolare per le regressioni multiple. In
+questi casi ci faremo coadiuvare da un pacchetto periferico ma molto
+simpatico, “broom”.
+
+``` r
+pacman::p_load(broom)
+Dati <- readxl::read_excel( "base_dati_CICCHITELLI_excel/Soddisfazione del paziente.xls")
+
+Dati %>%
+  lm(data = .,
+     Soddisfazione ~ Età + `Indice di gravità malattia` + `Indice di ansietà`) %>% tidy()
+```
+
+    ## # A tibble: 4 x 5
+    ##   term                         estimate std.error statistic  p.value
+    ##   <chr>                           <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)                   158.       18.1       8.74  5.26e-11
+    ## 2 Età                            -1.14      0.215    -5.31  3.81e- 6
+    ## 3 `Indice di gravità malattia`   -0.442     0.492    -0.898 3.74e- 1
+    ## 4 `Indice di ansietà`           -13.5       7.10     -1.90  6.47e- 2
+
+``` r
+Dati %>%
+  lm(data = .,
+     Soddisfazione ~ Età + `Indice di gravità malattia` + `Indice di ansietà`) %>%
+  tidy() %>%
+  mutate_if(is.numeric,round,3)
+```
+
+    ## # A tibble: 4 x 5
+    ##   term                         estimate std.error statistic p.value
+    ##   <chr>                           <dbl>     <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)                   158.       18.1       8.74    0    
+    ## 2 Età                            -1.14      0.215    -5.32    0    
+    ## 3 `Indice di gravità malattia`   -0.442     0.492    -0.898   0.374
+    ## 4 `Indice di ansietà`           -13.5       7.1      -1.90    0.065
+
+``` r
+Dati %>%
+  lm(data = .,
+     scale(Soddisfazione) ~
+       scale(Età) +
+       scale(`Indice di gravità malattia`) +
+       scale(`Indice di ansietà`)
+     ) %>%
+  tidy() %>%
+  mutate_if(is.numeric,round,3) %>%
+  select(-statistic)
+```
+
+    ## # A tibble: 4 x 4
+    ##   term                                estimate std.error p.value
+    ##   <chr>                                  <dbl>     <dbl>   <dbl>
+    ## 1 (Intercept)                            0         0.086   1    
+    ## 2 scale(Età)                            -0.591     0.111   0    
+    ## 3 scale(`Indice di gravità malattia`)   -0.111     0.123   0.374
+    ## 4 scale(`Indice di ansietà`)            -0.234     0.123   0.065

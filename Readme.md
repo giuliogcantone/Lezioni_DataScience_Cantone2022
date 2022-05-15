@@ -44,8 +44,7 @@ conclusione di una laurea magistrale, conosca almeno i principi di un
     essenziali delle pubblicazioni scientifiche.
 -   Lo studente apprende i principi della comunicazione “tecnica” in
     ambito privato. In particolare lo studente apprenderà come
-    “interrogare” dati in formato tabellare per supportare le proprie
-    proposte.
+    “interrogare” dati tabellari per supportare le proprie proposte.
 -   OPINIONE PERSONALE: una società civile necessita di lavoratori della
     pubblica amministrazione (in inglese, public servants…) che hanno
     dimestichezza coi dati. Essi, avendo un accesso privilegiato
@@ -93,9 +92,9 @@ Tutti e tre sono **gratuiti**.
 sociale a pagamento. `SPSS` non è un linguaggio ma una interfaccia che
 “pre-confeziona” alcune operazioni tipiche e poi le converte in diverse
 linguaggi. Infine, probabilmente conoscerete già `Excel`, che è uno
-strumento utile per l’immissione dei dati in formato tabellare, ma non
-per compiere analisi automatizzate (quindi: veloci, non richiedono molto
-sforzo). *Chi mi sa dire perché?*
+strumento utile per l’immissione dei dati tabellari, ma non per compiere
+analisi automatizzate (quindi: veloci, non richiedono molto sforzo).
+*Chi mi sa dire perché?*
 
 |                                                                                                                                                                        |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -181,16 +180,77 @@ Il linguaggio equivalente per la scrittura di articoli scientifici si chiama Lat
 (si pronuncia: LateCh; l'ultima lettera è una Chi greca).
 ---
 
+# Beneficio didattico di Tidyverse?
+
+Ci sono diversi benefici ad usare Tidyverse invece della sintassi base. L'idea di fondo dietro Tidyverse è che la tabella multivariata deve diventare l'oggetto centrale di ogni operazione per rendere R un linguaggio raffinato per la Data Science. Nel fare questo R "assorbe" caratteristiche da altri linguaggi.
+
+Per esempio, buona parte delle operazioni tabellari sono copiate da SQL, il linguaggio dei database relazionali, mentre le funzioni di automazione di solito si affidano a del "codice nascosto" in C++, che è un altro linguaggio!!!
+
+Il principale beneficio di imparare R subito con Tidyverse è che il codice si presenterà in una forma molto comprensibile, infatti ogni comando sarà intervallato da un simbolo `%>%` che serve a separare le operazioni in blocchettini atomici. Questa riduzione atomica è molto utile per lo studio perché potete isolare operazione per operazione facilmente e capire cosa state facendo per prove e tentativi.
+
+Inoltre, se imparate R Tidyverse è molto probabile che vi verrà facilissimo imparare SQL, dopo.
+
+Un difetto di Tidyverse: tende ad escludere le liste (`list`) dall'uso; mentre specialmente in programmazione avanzata per l'automazione (per esempio, lo scraping), le liste sono molto utile. C'è da dire che la loro sintassi di indicizzazione è cervellotica.
+
+# Risorse
+
+https://www.r-bloggers.com/ è una buona fonte, aggiornata, che consiglio anche di seguire su Twitter.
+
+Io moltissime cose le ho imparate piano piano su questo sito:
+https://stackoverflow.com/
+
+Stack Overflow è una sorta di forum che è esclusivamente dedicato a una sola funzione:
+
+- si sceglie un linguaggio informatico
+- si mostra un codice che non funziona
+- si cerca di spiegare come lo si vorrebbe fare funzionare
+
+A quel punto ci sono degli utenti, di solito davvero molto bravi, che propongono delle soluzioni, e chi fa la domanda sceglie la soluzione che trova migliore. Tutte le persone coinvolte in questo processo, ma soprattutto chi da la risposta migliore, prendono dei "punti". Accumulare punti quantifica la reputazione di quella persona e moltissime persone, soprattutto dal Terzo Mondo, che non possono studiare nelle Università ma sono auto-didatte, mettono la loro reputazione su questo sito nei loro curriculum.
+
+## Libri
+
+Personalmente, non conosco buoni libri dedicati esclusivamente ad R che siano a pagamento. Ne conosco solo di gratuiti, online, pubblicati con una estensione di Markdown che si chiama Bookdown.
+
+Qui una lista eterogenea:
+
+https://www.r-bloggers.com/2022/05/best-books-to-learn-r-programming-2/
+
+Qui una mia selezione personale:
+
+- Libro che copre nel dettaglio gli argomenti delle prime due lezioni:
+
+https://r4ds.had.co.nz/
+
+## Argomenti non coperti dalle lezioni:
+
+- Modeling statistico, molto utile per chi vuole fare ricerca sociologica quantitativa
+
+https://www.tmwr.org/
+
+- Text mining, per chi vuole lavorare su corpus testuali
+
+https://www.tidytextmining.com/
+
+- Ricettario grafico
+
+https://r-graphics.org/
+
+- (Io non lo ho mai completato) questo è considerato il miglior libro per capire sia la statistica multivariata che la programmazione in R di applicazioni Data Science / Artificial Intelligence 
+
+https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1071614177/ref=sr_1_1?keywords=An+Introduction+to+Statistical+Learning%3A+with+Applications+in+R&qid=1651979932&s=books&sr=1-1
+
+Se voi capite questo qui molto bene siete ad un livello per cui potete già lavorare come data scientist o potete entrare in qualunque dottorato di ricerca, anche uno in Computer Science.
+
+
 # Struttura delle Lezioni
 
 Il Seminario si compone di 6 Lezioni:
 
 1. Formati e strutture dati elementari su R
 2. Comandi di calcolo algebrico, logico-testuale e statistico
-3. Maneggiare il formato tabellare
+3. Maneggiare la struttura tabellare
 4. Visualizzazione grafica
-5. Principi di automazione dei comandi
-6. Tecniche avanzate di acquisizione dati
+5. Principi di automazione dei comandi ed alcune tecniche avanzate di Data Science
 
 Che troverete a [questo link](ciao)
 
@@ -206,7 +266,7 @@ Esame per frequentanti:
 Esempio di domande d'esame:
 
 ---
-Voglio calcolare la media del vettore "Altezze", quali delle seguenti pipelines produrrà un errore?
+DOMANDA: Voglio calcolare la media del vettore "Altezze", quali delle seguenti pipelines produrrà un errore?
 
 1. `Altezze %>% mean()`
 2. `Altezze %>% c() %>% mean()`
@@ -215,12 +275,12 @@ Voglio calcolare la media del vettore "Altezze", quali delle seguenti pipelines 
 ---
 
 ---
-Cosa descrive il risultato di questa pipeline?
+DOMANDA: Cosa descrive il risultato di questa pipeline?
 
 
 ```r
 Residenti %>%
-  filter(Nazionalità != "Italiana") %>%
+  filter(Nazionalità != "Italia") %>%
   group_by(Nazionalità) %>%
   summary(n() / nrow(Residenti))
 ```
@@ -235,3 +295,8 @@ Residenti %>%
     la percentuale sui Residenti.
 
 ------------------------------------------------------------------------
+
+Esempi di domande orale:
+
+-   Mi parli della differenza tra codice e dati.
+-   Cos’è l’argomento di una funzione informatica?

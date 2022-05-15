@@ -232,23 +232,24 @@ una chiamata ad una vista con:
 | Comando utile quando si lavora con scripts |
 
 Nel caso di valori logici è corretto parlare di “Interrogazione”
-rispetto ad una proposizione. Le interrogazioni sono concetti utili, per
-esempio il comando:
+rispetto ad una proposizione. Per esempio il comando:
 
 ``` r
-stringr::str_detect("Roma è la capitale","capitale")
+stringr::str_detect("Roma è la capitale",
+                    "capitale")
 ```
 
     ## [1] TRUE
 
 ``` r
-stringr::str_detect("Io vivo a Roma","capitale")
+stringr::str_detect("Io vivo a Roma",
+                    "capitale")
 ```
 
     ## [1] FALSE
 
 interroga se la stringa “capitale” è contenuto nella stringa “Roma è la
-capitale” e poi nel gramma “Io vivo a Roma”.
+capitale” e poi nella stringa “Io vivo a Roma”.
 
 ## Salvare e caricare files dati
 
@@ -268,11 +269,11 @@ Inoltre, tutti i termini sono visualizzabili nella finestra
 
 # Files .Rdata, cosa sono?
 
-Ci sono diversi modi per salvare il workspace come unico file di
-memoria. Questo salva TUTTI gli oggetti. Il più immediato è salvare
-l’intero file in formato `.Rdata` cliccando sull’iconcina del floppy
-disk (sapete cosa sia un floppy disk???) nella finestra Environment. Un
-modo alternativo più rapido di “salvare il workspace” è il comando:
+Ci sono diversi modi per salvare TUTTO il workspace come unico file di
+memoria. Il più immediato è salvare l’intero file in formato `.Rdata`
+cliccando sull’iconcina del floppy disk (sapete cosa sia un floppy
+disk???) nella finestra Environment. Un modo alternativo di “salvare il
+workspace” è il comando:
 
 ``` r
 save.image("NOME_DEL_FILE.RData")
