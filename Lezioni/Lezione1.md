@@ -3,40 +3,38 @@ Formati e strutture dati elementari su R
 
 # Formati e Documenti
 
-Con la parola “formato” ci riferiamo alla estensione (es, `.txt`) dei
-documenti (files) con cui lavoriamo.
+Formato: è l’estensione (es, `.txt`) dei documenti (files) con cui
+lavoriamo.
 
-I dati tabellari invece indicano dati dentro una tabella
-`righe x colonne`. I formati possono conservare:
+I formati possono conservare:
 
 -   `codice`
--   `dati`, cioé risultati
+-   `dati`, es. risultati
 
 |                                                                                                                                 |
 |---------------------------------------------------------------------------------------------------------------------------------|
 | Avete capito la differenza tra codice e dati?                                                                                   |
 | Il codice fa agire il computer secondo dei `comandi`. I `dati` sono le informazioni di input ed output (risultati) dei comandi. |
 
-Esistono tanti formati per conservare lo stesso tipo di struttura dati
-ma ci sono due formati di files comunemente usati per conservare codice
-su R.
+-   Esistono tanti formati per *conservare dati*
+-   Essenzialmente ci sono due formati di files per *conservare codice*
+    su R.
 
 # Conservare Codice
 
 ## Lo Script è un tipo di formato per conservare CODICE
 
-Per aprire un nuovo “Script”. In alto a sinistra, andate su “Files”, poi
-su “New Files”, ed infine “R Script”. Potete anche premere
-`CTRL + Shift + N`.
+Per aprire un nuovo “Script”: - In alto a sinistra, andate su “Files”, -
+Poi su “New Files”, - Infine “R Script”.
+
+Potete anche premere `CTRL + Shift + N`.
 
 Lo script altro non è che un file di testo in cui annotate i comandi per
 lanciarli uno per uno, oppure in sequenza.
 
 Per lanciare un comando dentro uno script bisogna posizionare il cursore
-del testo all’inizio del comando e poi premere `Invio + ctrl`. Premere
-Invio da solo manda a capo il testo.
-
-Provate a scrivere questo comando in uno script:
+del testo all’inizio del comando e poi premere `Invio + ctrl`. Provate a
+scrivere questo comando in uno script:
 
     print("Ciao a tutti, come va?")
 
@@ -48,17 +46,22 @@ e poi lanciatelo con `Invio + ctrl`.
 | R è ottimizzato in maniera tale che moltissimi comandi hanno un “print” implicito del loro risultato in console. Per esempio, se scrivete solo `2+2` in uno script e lo lanciate, cosa vedete apparire in console? |
 | Questo perchè R *interpreta* il vostro comando, non esegue sempre e solo ciecamente gli ordini.                                                                                                                    |
 
-Adesso lanciate `print("2+2")`. Cosa è cambiato? In questa lezione
-impareremo a disambiguare le operazioni per ottenere sempre il risultato
+Adesso lanciate `print("2+2")`. Cosa è cambiato? In queste lezioni
+impareremo a **disambiguare** le operazioni per ottenere il risultato
 desiderato.
 
 ------------------------------------------------------------------------
 
 Generalmente, non vorrete mai lanciare uno script per intero.
 
-|                                                                                                                                                                                                                            |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Questo non è Python! Su Python c’è la (brutta) tendenza a lanciare gli script per intero. Questa pratica non aiuta affatto chi è alle prime armi perché non permette di individuare quale pezzetto del codice è sbagliato. |
+------------------------------------------------------------------------
+
+Questo non è Python! Su Python c’è la (brutta) tendenza a lanciare gli
+script per intero. Questa pratica non aiuta affatto chi è alle prime
+armi perché non permette di individuare quale pezzetto del codice è
+sbagliato.
+
+------------------------------------------------------------------------
 
 ## Il Markdown
 
@@ -75,12 +78,14 @@ aprire uno Script, ma stavolta scegliete R Markdown.
 
 Il Markdown è simile allo script, ma in alto a destra c’è un simbolo con
 un più ed una “c”. Se premuto, apre un *chunk* del linguaggio scelto.
-Adesso si può scrivere un codice, ad esempio una sequenza di comandi. In
-alto a destra del chunk c’è una freccia verso destra. Premendo la
-freccia, il codice sarà eseguito, ma piuttosto che riportare i risultati
-in console, li riporterà immediatamente sotto il chunk.
+Adesso si può scrivere un codice dentro il chunk, ad esempio una
+sequenza di comandi. In alto a destra del chunk c’è una freccia verso
+destra. Premendo la freccia, il codice dentro il chunk sarà eseguito.
+
+Non troverete i risultati in console, ma immediatamente sotto il chunk.
 
 ``` r
+# ricordatevi che spesso (NON SEMPRE) il print() è pleonastico
 print("ciao, come state?")
 ```
 
@@ -111,6 +116,17 @@ file esterno si troverà comunque nella cartella del Progetto.
 
 Il Progetto si apre da File -&gt; New Project. Da qui dovreste anche
 potervi connettere a progetti “condivisi” su piattaforme come Github.
+
+### Lavorare con Markdown e progetti
+
+Se la cartella del Markdown è in una sottocartella della cartella
+progetto e la cartella in cui conservate i files dati salvati o da
+importare sta su una sottocartella diversa, R non riuscirà a torvare i
+files da caricare. In questo caso, dovete:
+
+-   andare nelle opzioni globali di R Studio
+-   andare su R Markdown
+-   Cambiare “Evaluate chunks in directory” da “Document” a “Project.”
 
 # Prima di conservare dati bisogna organizzare i dati in strutture di classificazione e poi assegnarli ad un “oggetto” (che è un nome)
 
@@ -168,8 +184,8 @@ oppure
 `quattro <- 2+2`
 
 Però spesso R *interpreta* anche `=` come un comando di assegnazione.
-Spesso la grammatica corretta dipende dal dialetto che stiamo usando, e
-solo la pratica ci farà capire quale sia il simbolo più appropriato.
+Spesso la grammatica corretta dipende dal dialetto che stiamo usando. La
+pratica ci farà capire quale sia il simbolo più appropriato.
 
 ``` r
 1 -> a
@@ -204,9 +220,16 @@ disequaz
     ## [1] FALSE
 
 Come abbiamo già visto, **quando si scrive il termine dell’oggetto** e
-si esegue il codice (con Invio oppure eseguendo l’intero blocco chunk),
-viene eseguito un `print` implicito dell’oggetto. Questa operazione
-viene chiamata “invocazione” oppure chiamata (call) di un oggetto.
+si esegue il codice, viene eseguito un `print` implicito dell’oggetto.
+Questa operazione viene chiamata “invocazione” oppure chiamata (call) di
+un oggetto, vedremo nelle prossime lezioni" che è utile “concatenerare”
+una chiamata ad una vista con:
+
+`oggetto %>% View()`
+
+|                                            |
+|--------------------------------------------|
+| Comando utile quando si lavora con scripts |
 
 Nel caso di valori logici è corretto parlare di “Interrogazione”
 rispetto ad una proposizione. Le interrogazioni sono concetti utili, per
@@ -437,31 +460,29 @@ quindi sospetto che i miei vettori non saranno della stessa lunghezza?
 In questo caso si usa il simbolo `NA`, che significa “missing value”,
 ovverosia “informaizone mancante”.
 
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Il concetto di nullità infomatica è ben più raffinato, infatti si usa distinguire tra:                                                                                                                                                                                                                                                                                                                                                                        |
-| Nullità di valore numerico, cioé `0`.                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Nullità di informazione, cioé sapere di non sapere `NA`.                                                                                                                                                                                                                                                                                                                                                                                                      |
-| Nullità di possbilità, cioé sapere che non può esistere `NaN`.                                                                                                                                                                                                                                                                                                                                                                                                |
-| Nullificazione di valore, cioé cancellazione dell’informazione errata LATO UMANO `NULL`.†                                                                                                                                                                                                                                                                                                                                                                     |
-| Il Prof. Giuffrida insegna che gran parte dei casini informatici avvengono perché gli impiegati non capiscono la differenza tra i diversi livelli di nullificazione. Spero che un laureato UniCT capisca bene l’importanza di capire la differenza tra diversi gradi di nullità prima di laurearsi, così da non rendersi responsabile di casini.                                                                                                              |
-| Faremo degli esempi più avanti quando tratteremo delle funzioni statistiche.                                                                                                                                                                                                                                                                                                                                                                                  |
-| †ricordate, lato macchina non esiste informazione errata, esistono solo comandi impossibili da eseguire. La filosofia dell’informazione studia il problema di far capire alle macchine che alcune informazioni sono coerenti col loro codici ma *false* se rapportate alla realtà. Questo è uno dei problemi informatici della disinformazione, il fatto che le macchine valutano solo la coerenza col loro funzionamento interno e non con la realtà esterna |
+|                                                                                                                                                                                                                                                                                                                                                  |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Il concetto di nullità infomatica è ben più raffinato, infatti si usa distinguire tra:                                                                                                                                                                                                                                                           |
+| Nullità di valore numerico, cioé `0`.                                                                                                                                                                                                                                                                                                            |
+| Nullità di informazione, cioé sapere di non sapere `NA`.                                                                                                                                                                                                                                                                                         |
+| Nullità di possbilità, cioé sapere che non può esistere `NaN`.                                                                                                                                                                                                                                                                                   |
+| Nullificazione di valore, cioé cancellazione dell’informazione errata LATO UMANO `NULL`.                                                                                                                                                                                                                                                         |
+| Il Prof. Giuffrida insegna che gran parte dei casini informatici avvengono perché gli impiegati non capiscono la differenza tra i diversi livelli di nullificazione. Spero che un laureato UniCT capisca bene l’importanza di capire la differenza tra diversi gradi di nullità prima di laurearsi, così da non rendersi responsabile di casini. |
+| Faremo degli esempi più avanti quando tratteremo delle funzioni statistiche.                                                                                                                                                                                                                                                                     |
+| Ricordate, lato macchina non esiste informazione errata, esistono solo comandi impossibili da eseguire. Questo è uno dei problemi informatici della disinformazione, il fatto che le macchine valutano solo la coerenza col loro funzionamento interno e non con la realtà esterna.                                                              |
 
 ### I comandi per formare una tabella tibble
 
 Le `tibble` si costruiscono per colonne, separate da virgole.
 
 ``` r
+#La costruzione di ogni colonna è simile alla costruzione di un vettore, ma qui si usa "=" e non "<-". "<-" lo usiamo per assegnare la struttura della tabella all'oggetto Tabella1.
+
 Tabella1 <- tibble(
   Numeri = c(1,2,3),
   Cognomi = c("Rossi","Verdi","Tomaselli")
 )
 ```
-
-Notate bene che siccome `tibble` fa parte del dialetto Tidyverse, qui
-preferisco usare `=` per assegnare il contenuto dei vettori ai nomi
-delle colonne.
 
 Ci sono anche molti altri modi di formare una tabella da zero, ma questo
 è quello basilare.
@@ -558,7 +579,8 @@ cbind(Tabella1,
 Ebbene, R ha interpretato il comando `cbind` come se dovesse *anche*
 cambiare la tipologia di tabella da `tibble` a `data.frame`. Questo
 perché le `tibble` **NON AMMETTONO** due colonne con lo stesso nome,
-mentre i `data.frame` sì.
+mentre i `data.frame` sì. Per quanto suoni strano, noi *vogliamo*
+strutture più rigorose!
 
 ## DOGMA DI TIDYVERSE
 
@@ -575,6 +597,8 @@ Questo è un Dogma che viene usato da ogni programmatore “Tidy”:
 Questa è una generica tabella:
 
 ``` r
+# set.seed serve a rendere i valori casuali ma riproducibili...
+# vedrete come nella nota sotto
 set.seed(1810)
 tibble(Dado_1 = sample(1:6, 30, replace = T),
        Dado_2 = sample(1:6, 30, replace = T))
@@ -599,6 +623,34 @@ tibble(Dado_1 = sample(1:6, 30, replace = T),
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | In questa tabella il comando `sample()` campiona, ovverosia, estrae a caso dei numeri come se lanciassimo dei dadi.                                                                                                                                                                                                 |
 | Il comando `set.seed()` contenente un numero serve a rendere replicabile in maniera identica proprio quel lancio dei dati, che però non può essere conosciuto a priori. Molti filosofi dell’informazione trovano questo argomento molto interessante e parlando correttamente di “pseudo random number generation”. |
+
+NOTA IMPORTANTISSIMA:
+
+Data la struttura della tabella di cui sopra, si sta implicando che c’è
+un processo di *appaiamento* tra osservazioni. Presentare i dati in
+questo modo sta implicando che noi non sappiamo perché, ma è importante
+che il primo lancio del dado 1 sia paragonato proprio al primo lancio
+del dado 2. Vedremo adesso una struttura simile che fa capire il
+concetto di appaiamento dei dati.
+
+``` r
+tibble(
+  Nome_paziente = rep("Anonimo",6),
+  Kg_prima_dieta = c(102,88,93,90,92,104),
+  Kg_dopo_dieta = c(86,77,89,87,94,98))
+```
+
+    ## # A tibble: 6 x 3
+    ##   Nome_paziente Kg_prima_dieta Kg_dopo_dieta
+    ##   <chr>                  <dbl>         <dbl>
+    ## 1 Anonimo                  102            86
+    ## 2 Anonimo                   88            77
+    ## 3 Anonimo                   93            89
+    ## 4 Anonimo                   90            87
+    ## 5 Anonimo                   92            94
+    ## 6 Anonimo                  104            98
+
+# Tabelle problematiche
 
 Qual è il problema della tabella qui sotto?
 
@@ -650,17 +702,18 @@ Che problemi abbiamo qui?
 
 ``` r
 set.seed(1810)
-data.frame(Nome = c("Giorgio", "Michela", "Laura", "Arancione"),
-           "Stato Civile" = c("Sposato con Michela", NA, "Nubile", "Sposato"),
-           Età = c(34,28,"venti",20)
+data.frame(Nome = c("Giorgio", "Michela", "Laura", "Arancione","Kadim"),
+           "Stato_Civile" = c("Sposato con Michela", "Vedi sopra", "Nubile", "Sposato",NA),
+           Età = c(34,28,"venti",20,32/33)
 )
 ```
 
-    ##        Nome        Stato.Civile   Età
-    ## 1   Giorgio Sposato con Michela    34
-    ## 2   Michela                <NA>    28
-    ## 3     Laura              Nubile venti
-    ## 4 Arancione             Sposato    20
+    ##        Nome        Stato_Civile              Età
+    ## 1   Giorgio Sposato con Michela               34
+    ## 2   Michela          Vedi sopra               28
+    ## 3     Laura              Nubile            venti
+    ## 4 Arancione             Sposato               20
+    ## 5     Kadim                <NA> 0.96969696969697
 
 # Salvare ed Importare in formato .csv ed Excel
 
@@ -694,6 +747,9 @@ Al posto del pacchetto “readr” useremo il pacchetto “readxl”.
 
 ``` r
 pacman::p_load(readxl)
+
+Laureati <- read_excel("base_dati_CICCHITELLI_excel/Laureati.xls")
+
 Laureati <- read_excel("base_dati_CICCHITELLI_excel/Laureati.xls", 
     col_types = c("numeric", "text", "date", 
         "text", "numeric", "numeric", "date", 
@@ -751,10 +807,11 @@ Tabella1[2,]
     ##   <chr>    <dbl>
     ## 1 Paperino    32
 
-Di solito però le righe sono filtrate con strumenti diversi del dialetto
-tidyverse.
+**Di solito però le righe sono filtrate con strumenti diversi del
+dialetto Tidyverse. In generale in dialetto Tidyverse tutto diventa più
+facile da ricordare.**
 
-# Importare database dal web
+# Importare database dal web (Anticipazione della Lezione 6)
 
 Tra le funzioni più entuasiamanti di R c’è la possibilità di condividere
 database (cioé: insiemi di tabelle) senza mai veramente uscire da R

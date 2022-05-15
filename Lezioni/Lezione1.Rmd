@@ -14,12 +14,12 @@ pacman::p_load("tidyverse")
 
 # Formati e Documenti
 
-Con la parola "formato" ci riferiamo alla estensione (es, `.txt`) dei documenti (files) con cui lavoriamo.
+Formato: è l'estensione (es, `.txt`) dei documenti (files) con cui lavoriamo.
 
-I dati tabellari invece indicano dati dentro una tabella `righe x colonne`. I formati possono conservare:
+I formati possono conservare:
 
 - `codice`
-- `dati`, cioé risultati
+- `dati`, es. risultati
 
 ---
 Avete capito la differenza tra codice e dati?
@@ -28,18 +28,23 @@ Il codice fa agire il computer secondo dei `comandi`.
 I `dati` sono le informazioni di input ed output (risultati) dei comandi.
 ---
 
-Esistono tanti formati per conservare lo stesso tipo di struttura dati ma ci sono due formati di files comunemente usati per conservare codice su R.
+- Esistono tanti formati per *conservare dati*
+- Essenzialmente ci sono due formati di files per *conservare codice* su R.
 
 # Conservare Codice
 
 ## Lo Script è un tipo di formato per conservare CODICE
 
-Per aprire un nuovo "Script". In alto a sinistra, andate su "Files", poi su "New Files", ed infine "R Script". Potete anche premere `CTRL + Shift + N`.
+Per aprire un nuovo "Script":
+- In alto a sinistra, andate su "Files",
+- Poi su "New Files",
+- Infine "R Script".
+
+Potete anche premere `CTRL + Shift + N`.
 
 Lo script altro non è che un file di testo in cui annotate i comandi per lanciarli uno per uno, oppure in sequenza.
 
-Per lanciare un comando dentro uno script bisogna posizionare il cursore del testo all'inizio del comando e poi premere `Invio + ctrl`. Premere Invio da solo manda a capo il testo.
-
+Per lanciare un comando dentro uno script bisogna posizionare il cursore del testo all'inizio del comando e poi premere `Invio + ctrl`. 
 Provate a scrivere questo comando in uno script:
 
 ```
@@ -58,14 +63,16 @@ Questo perchè R *interpreta* il vostro comando, non esegue sempre e solo ciecam
 ---
 
 Adesso lanciate `print("2+2")`. Cosa è cambiato?
-In questa lezione impareremo a disambiguare le operazioni per ottenere sempre il risultato desiderato.
+In queste lezioni impareremo a **disambiguare** le operazioni per ottenere il risultato desiderato.
 
 ---
 
 Generalmente, non vorrete mai lanciare uno script per intero.
 
 ---
+
 Questo non è Python! Su Python c'è la (brutta) tendenza a lanciare gli script per intero. Questa pratica non aiuta affatto chi è alle prime armi perché non permette di individuare quale pezzetto del codice è sbagliato.
+
 ---
 
 ## Il Markdown
@@ -80,9 +87,13 @@ Per esempio, queste lezioni sono scritte in *R Markdown*, che è una versione al
 Per aprire un nuovo file Markdown, seguite la stessa procedura per aprire uno Script, ma stavolta scegliete R Markdown.
 
 Il Markdown è simile allo script, ma in alto a destra c'è un simbolo con un più ed una "c".
-Se premuto, apre un *chunk* del linguaggio scelto. Adesso si può scrivere un codice, ad esempio una sequenza di comandi. In alto a destra del chunk c'è una freccia verso destra. Premendo la freccia, il codice sarà eseguito, ma piuttosto che riportare i risultati in console, li riporterà immediatamente sotto il chunk.
+Se premuto, apre un *chunk* del linguaggio scelto. Adesso si può scrivere un codice dentro il chunk, ad esempio una sequenza di comandi. In alto a destra del chunk c'è una freccia verso destra. Premendo la freccia, il codice dentro il chunk sarà eseguito.
+
+Non troverete i risultati in console, ma immediatamente sotto il chunk.
 
 ```{r include=TRUE}
+
+# ricordatevi che spesso (NON SEMPRE) il print() è pleonastico
 print("ciao, come state?")
 "tutto bene"
 
@@ -103,6 +114,14 @@ Una buona pratica è creare dei Progetti di R. Queste sono cartelle del vostro c
 
 Il Progetto si apre da File -> New Project.
 Da qui dovreste anche potervi connettere a progetti "condivisi" su piattaforme come Github.
+
+### Lavorare con Markdown e progetti
+Se la cartella del Markdown è in una sottocartella della cartella progetto e la cartella in cui conservate i files dati salvati o da importare sta su una sottocartella diversa, R non riuscirà a torvare i files da caricare.
+In questo caso, dovete:
+
+- andare nelle opzioni globali di R Studio
+- andare su R Markdown
+- Cambiare "Evaluate chunks in directory" da "Document" a "Project."
 
 # Prima di conservare dati bisogna organizzare i dati in strutture di classificazione e poi assegnarli ad un "oggetto" (che è un nome)
 
@@ -147,7 +166,8 @@ oppure
 
 `quattro <- 2+2`
 
-Però spesso R *interpreta* anche `=` come un comando di assegnazione. Spesso la grammatica corretta dipende dal dialetto che stiamo usando, e solo la pratica ci farà capire quale sia il simbolo più appropriato.
+Però spesso R *interpreta* anche `=` come un comando di assegnazione. Spesso la grammatica corretta dipende dal dialetto che stiamo usando.
+La pratica ci farà capire quale sia il simbolo più appropriato.
 
 ```{r}
 1 -> a
@@ -167,16 +187,24 @@ equaz
 disequaz
 ```
 
-Come abbiamo già visto, **quando si scrive il termine dell'oggetto** e si esegue il codice (con Invio oppure eseguendo l'intero blocco chunk), viene eseguito un `print` implicito dell'oggetto. Questa operazione viene chiamata "invocazione" oppure chiamata (call) di un oggetto.
+Come abbiamo già visto, **quando si scrive il termine dell'oggetto** e si esegue il codice, viene eseguito un `print` implicito dell'oggetto. Questa operazione viene chiamata "invocazione" oppure chiamata (call) di un oggetto, vedremo nelle prossime lezioni" che è utile "concatenerare" una chiamata ad una vista con:
 
-Nel caso di valori logici è corretto parlare di "Interrogazione" rispetto ad una proposizione. Le interrogazioni sono concetti utili, per esempio il comando:
+`oggetto %>% View()`
+
+---
+Comando utile quando si lavora con scripts
+---
+
+Nel caso di valori logici è corretto parlare di "Interrogazione" rispetto ad una proposizione. Per esempio il comando:
 
 ```{r}
-stringr::str_detect("Roma è la capitale","capitale")
-stringr::str_detect("Io vivo a Roma","capitale")
+stringr::str_detect("Roma è la capitale",
+                    "capitale")
+stringr::str_detect("Io vivo a Roma",
+                    "capitale")
 
 ```
-interroga se la stringa "capitale" è contenuto nella stringa "Roma è la capitale" e poi nel gramma "Io vivo a Roma".
+interroga se la stringa "capitale" è contenuto nella stringa "Roma è la capitale" e poi nella stringa "Io vivo a Roma".
 
 
 ## Salvare e caricare files dati
@@ -195,9 +223,9 @@ DI SALVARE I DATI DI LAVORO!
 
 # Files .Rdata, cosa sono?
 
-Ci sono diversi modi per salvare il workspace come unico file di memoria. Questo salva TUTTI gli oggetti.
+Ci sono diversi modi per salvare TUTTO il workspace come unico file di memoria.
 Il più immediato è salvare l'intero file in formato `.Rdata` cliccando sull'iconcina del floppy disk (sapete cosa sia un floppy disk???) nella finestra Environment.
-Un modo alternativo più rapido di "salvare il workspace" è il comando:
+Un modo alternativo di "salvare il workspace" è il comando:
 
 ```{r}
 save.image("NOME_DEL_FILE.RData")
@@ -260,6 +288,7 @@ amici[2:3]
 # Notate la differenza col prossimo comando
 amici[c(1,3)]
 ```
+
 La cosa interessante di questo chunk è che è possibile richiamare più di un elemento inserendo un vettore **integer** invece di un singolo numero. Una costruzione intelligente di un **vettore integer** con le posizioni degli elementi da richiamare può eseguire una ricerca mirata in un lungo vettore. In questo caso la formula `2:3` comanda: da 2 a 3.
 
 In questo modo è possibile anche fare assegnazioni non banali.
@@ -493,6 +522,9 @@ Questa stessa operazione può essere usata per caricare tabelle da Excel. Al pos
 
 ```{r}
 pacman::p_load(readxl)
+
+Laureati <- read_excel("base_dati_CICCHITELLI_excel/Laureati.xls")
+
 Laureati <- read_excel("base_dati_CICCHITELLI_excel/Laureati.xls", 
     col_types = c("numeric", "text", "date", 
         "text", "numeric", "numeric", "date", 

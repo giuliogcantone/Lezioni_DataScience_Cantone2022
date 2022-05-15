@@ -121,3 +121,18 @@ E se volessi aggiungere un terzo elemento "mutabile" nel mio map?
 Per questo esiste pmap_*(), ma...
 
 ...richiede di saper usare le liste, che non sono coperte da queste lezioni. Vi importa sapere che si può fare.
+
+# Acquisizione dati per API di Twitter
+
+API significa APplication Programming Interface...
+
+... e non significa nulla.
+
+L'idea dietro una API è che la API è un "protocollo". Per esempio, quando voi fate domanda di laurea dovete seguire un protocollo in cui dimostrate di avere i requisiti, qualcuno li accredita e vi organizza una seduta di laurea.
+
+Concettualmente la API è la stessa cosa ma per acquisire dati, è un po' come una richiesta di prestito libri in biblioteca.
+
+Non tutti i siti hanno un protocollo API, ma i più famosi lo hanno. Usano le API per gestire il traffico dati ed evitare che qualcuno si metta ad intasare i loro siti con *applicazioni che fanno scraping*, che sono l'alternativa alle API.
+
+Storicamente, il gruppo META (Zuckemberg) ha deciso di rifiutarsi di permettere qualunque tipo di acquisizione dati per motivi legali, mentre Twitter ha una politica piuttosto aperta. Circa ogni 2 anni le API vanno ricontrattualizzate... infatti mentre sto scrivendo questa guida io ho una autorizzazione parziale...
+

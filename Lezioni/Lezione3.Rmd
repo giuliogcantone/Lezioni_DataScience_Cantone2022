@@ -140,8 +140,6 @@ full_join(Utenti,Case %>% rename(Cognome = Famiglia),
 ```
 
 
-
-
 # Anti-join, un filtro avanzato, utile nelle analisi testuali
 
 Il miglior modo di capire l'anti-join è introdurre un pacchetto avanzato per l'analisi testuale, `tidytext`. Tidytext prende un testo e lo trasforma in una `tibble`. Possiamo scaricare testi storici grazie al pacchetto `gutenbergr`.
@@ -194,7 +192,42 @@ Sicilia_t %>%
 ```
 
 
-# Pivot
+# Campionamento sul popolazioni finite (sorteggio da una lista di records)
+
+In alcuni casi vogliamo sorteggiare a caso un certo numero di elementi da una lista di records.
+
+```{r}
+# Introduciamo un pacchetto abbastanza scherzoso che genera a caso delle identità fittizie
+pacman::p_load(tidyverse)
+pacman::p_load(randomNames)
+
+randomNames(100, gender = c(rep(0,44),
+                           rep(1,56)),
+            return.complete.data = T) %>%
+  as_tibble() -> Elenco
+
+Elenco
+
+```
+
+```{r}
+Elenco %>% slice_sample(n = 10)
+
+Elenco %>% slice_sample(prop = .5)
+
+# Adesso vogliamo campionare solo 2 uomini e 8 donne, si chiama sovracampionamento. operazione utile per contrastare l'attrito demoscopico.
+
+
+Elenco %>% group_by(gender) %>%
+  slice_sample(n = c(10))
+
+#Questo funziona?
+# La soluzione si troverà nella Lezione 5!
+
+```
+
+
+# Pivoting
 
 Pivot su Tidyverse significa una cosa un po' diversa da "pivot" su Excel.
 In concreto, la tabella pivot di Excel è l'equivalente della tabella sommario su Tidyverse.
