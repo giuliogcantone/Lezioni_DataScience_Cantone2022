@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+author: "Giulio G. Cantone"
+date: "17/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse,
+               tidygraph,
+               ggraph)
+```
+
+```{r}
+set.seed(10)
+tidygraph::play_erdos_renyi(10, p = .2, directed = F) %>%
+  activate(nodes) %>%
+  mutate(id = row_number(),
+         Wage = rnorm(10,1500,500),
+         Gender = sample(c("M","F"),
+                         10,replace = T)) %>%
+  activate(edges) %>%
+  mutate(Friendship = sample(c("Recent","Old"),
+                           10,replace = T)
+         ) %>%
+  activate(nodes) -> a
+
+a
+
+a %>%
+  ggraph(layout = "stress") +
+  geom_edge_link() +
+  geom_node_point(fill = "white",
+                  size = 7, shape = 21, stroke = 1,
+                  color = 'black')+
+  geom_node_text(aes(label = id))+
+  theme_void() +
+  theme(legend.position="none") 
+
+a %>%
+  ggraph(layout = "stress") +
+  geom_edge_link(aes(color = Friendship))+
+  scale_edge_color_manual(values = c("Recent" = "green",
+                                     "Old" = "black"))+
+  geom_node_point(aes(fill = Gender),
+                  size = 7, shape = 21, stroke = 1,
+                  color = 'black')+
+  scale_fill_manual(values = c("M" = "blue",
+                               "F" = "red"))+
+  geom_node_text(aes(label = id))+
+  theme_void() +
+  theme(legend.position="none") 
+
+
+```
+
